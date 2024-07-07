@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model tbl_place {
+  id              Int              @id @default(autoincrement())
+  title           String
+  subtitle        String
+  description     String
+  region_id       Int
+  subregion_id    Int
+  google_uid      String
+  superlative_id  Int?
+  num_stars       Int              @default(0)
+  tbl_region      tbl_region       @relation(fields: [region_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_region_id")
+  tbl_sub_region  tbl_sub_region   @relation(fields: [subregion_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_sub_region_id")
+  tbl_superlative tbl_superlative? @relation(fields: [superlative_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_superlative_id")
+}
+
+model tbl_region {
+  id        Int         @id @default(autoincrement())
+  name      String
+  tbl_place tbl_place[]
+}
+
+model tbl_sub_region {
+  id        Int         @id @default(autoincrement())
+  name      String
+  tbl_place tbl_place[]
+}
+
+model tbl_superlative {
+  id        Int         @id @default(autoincrement())
+  name      String
+  tbl_place tbl_place[]
+}

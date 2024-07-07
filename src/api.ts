@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export const app = express();
 
@@ -19,6 +22,11 @@ const api = express.Router();
 api.get('/hello', (req, res) => {
   res.status(200).send({ message: 'hello world' });
 });
+
+api.get('/test', async (req, res) => {
+  const result = await prisma.tbl_place.findMany()
+  res.json(result);
+})
 
 // Version the api
 app.use('/api/v1', api);
