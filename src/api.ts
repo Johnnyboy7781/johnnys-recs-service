@@ -17,16 +17,16 @@ app.get(['/health', '/'], (req, res) => {
   res.status(200).send({ status: 'up' });
 });
 
-const api = express.Router();
-
-api.get('/hello', (req, res) => {
+app.get('/hello', (req, res) => {
   res.status(200).send({ message: 'hello world' });
 });
 
-api.get('/test', async (req, res) => {
+app.get('/test', async (req, res) => {
   const result = await prisma.tbl_place.findMany()
   res.json(result);
 })
 
-// Version the api
-app.use('/api/v1', api);
+app.get('*', async (req, res) => {
+  console.log(`Received bad request at URL ${req.url}`);
+  res.status(404).send("Not found!");
+})
