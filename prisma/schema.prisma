@@ -23,15 +23,18 @@ model tbl_place {
 }
 
 model tbl_region {
-  id        Int         @id @default(autoincrement())
-  name      String
-  tbl_place tbl_place[]
+  id             Int              @id @default(autoincrement())
+  name           String
+  tbl_place      tbl_place[]
+  tbl_sub_region tbl_sub_region[]
 }
 
 model tbl_sub_region {
-  id        Int         @id @default(autoincrement())
-  name      String
-  tbl_place tbl_place[]
+  id         Int         @id @default(autoincrement())
+  name       String
+  region_id  Int
+  tbl_place  tbl_place[]
+  tbl_region tbl_region  @relation(fields: [region_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_subregion_region")
 }
 
 model tbl_superlative {
