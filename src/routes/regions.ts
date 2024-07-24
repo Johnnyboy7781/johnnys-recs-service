@@ -8,4 +8,3 @@ regionRouter.get('/', async (req, res) => {
     const result = await prisma.tbl_region.findMany();
     res.json(result);
 })
-

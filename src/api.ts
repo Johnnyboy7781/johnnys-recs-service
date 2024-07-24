@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import { subregionRouter } from './routes/subregion';
 import { regionRouter } from './routes/regions';
+import { placesRouter } from './routes/places';
 
 export const app = express();
 
@@ -18,6 +19,9 @@ app.use((req, res, next) => {
   const path = req.path;
 
   console.log(`[${startTime.toISOString()}] Received ${req.method} request at path ${path}`);
+  if (Object.keys(req.query).length > 0) {
+    console.log(`[${startTime.toISOString()}] > Query parameters received: ${JSON.stringify(req.query)}`);
+  }
 
   res.on('finish', () => {
     const endTime = new Date();
@@ -36,6 +40,7 @@ app.get(['/health', '/'], (req, res, next) => {
 // Use routers
 app.use('/subregions', subregionRouter);
 app.use('/regions', regionRouter);
+app.use('/places', placesRouter)
 
 // Error catch-all route
 app.get('*', async (req, res) => {
