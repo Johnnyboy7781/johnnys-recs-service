@@ -12,13 +12,13 @@ const buildWhereClause = (params: ParsedQs): WhereClause => {
         region_id: parseInt(params.region_id.toString())
     };
     if (params.subregion_id !== "-1") {
-        whereClause.subregion_id = parseInt(params.region_id.toString());
+        whereClause.subregion_id = parseInt(params.subregion_id.toString());
     }
     if (params.num_stars !== "-1") {
-        whereClause.num_stars = parseInt(params.num_stars.toString());
+        whereClause.num_stars = { gte: parseInt(params.num_stars.toString()) };
     }
     if (params.has_superlative === "true") {
-        whereClause.superlative_id = { not: null };
+        whereClause.superlative = { not: null };
     }
 
     return whereClause;
