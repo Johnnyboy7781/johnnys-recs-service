@@ -1,9 +1,13 @@
 import express from "express";
 import { ParsedQs } from "qs";
+import axios, { AxiosResponse } from "axios";
 
 import { prisma } from "../utils/prisma-entry";
 
 export const placesRouter = express.Router();
+
+const googleApiUrl = "https://places.googleapis.com/v1/places";
+const fieldMask = "fields=nationalPhoneNumber,formattedAddress,googleMapsUri,websiteUri,regularOpeningHours.openNow"
 
 type WhereClause = { [k: string]: number | object }
 
@@ -16,7 +20,7 @@ const buildWhereClause = (params: ParsedQs): WhereClause => {
     }
     if (params.num_stars !== "-1") {
         whereClause.num_stars = { gte: parseInt(params.num_stars.toString()) };
-    }
+    }   
     if (params.has_superlative === "true") {
         whereClause.superlative = { not: null };
     }
@@ -34,4 +38,19 @@ placesRouter.get("/", async (req, res) => {
     );
 
     res.json(response);
+});
+
+placesRouter.get("/:google_uid", async (req, res) => {
+    const fullApiUrl = `${googleApiUrl}/${req.params.google_uid}?key=${process.env.GOOGLE_API_KEY}&${fieldMask}`;
+    let response: AxiosResponse;
+
+    try {
+        response = await axios.get(fullApiUrl);
+    } catch (error) {
+        console.error(`ERROR: Places API request failed, URL attempted: ${fullApiUrl}`);
+        res.status(500).json({ message: "Something went wrong with the Places API request!" });
+        return;
+    }
+
+    res.json(response.data);
 });
