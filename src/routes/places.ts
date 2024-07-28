@@ -11,6 +11,12 @@ const fieldMask = "fields=nationalPhoneNumber,formattedAddress,googleMapsUri,web
 
 type WhereClause = { [k: string]: number | object }
 
+/**
+ * Build the where clause that will be used to get a filtered list of places
+ * 
+ * @param params The parameters passed via query params 
+ * @returns An object that will be used to filter places
+ */
 const buildWhereClause = (params: ParsedQs): WhereClause => {
     const whereClause: WhereClause = {
         region_id: parseInt(params.region_id.toString())
@@ -28,6 +34,7 @@ const buildWhereClause = (params: ParsedQs): WhereClause => {
     return whereClause;
 }
 
+// Get all places that match the supplied parameters
 placesRouter.get("/", async (req, res) => {
     const whereClause = buildWhereClause(req.query);
 
@@ -40,6 +47,7 @@ placesRouter.get("/", async (req, res) => {
     res.json(response);
 });
 
+// Reach out to the Google Places API for place data such as address, phone number, etc.
 placesRouter.get("/:google_uid", async (req, res) => {
     const fullApiUrl = `${googleApiUrl}/${req.params.google_uid}?key=${process.env.GOOGLE_API_KEY}&${fieldMask}`;
     let response: AxiosResponse;
