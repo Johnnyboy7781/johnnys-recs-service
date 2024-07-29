@@ -9,6 +9,7 @@ An Express.js server that handles request to a Postgres database as well as the 
 To run locally, follow these steps:
 
 1. Run ```npm i``` to download dependencies.
+2. Run ```npx prisma generate``` to generate the prisma client.
 2. Run ```npm run dev``` to start the local server.
 
 That's it! 🎉
