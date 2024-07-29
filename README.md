@@ -12,6 +12,7 @@ To run locally, follow these steps:
 2. Run ```npx prisma generate``` to generate the prisma client.
 2. Run ```npm run dev``` to start the local server.
 
+Your app will then be available at [http://localhost:3000](http://localhost:3000).  
 That's it! 🎉
 
 *Note*: This service depends on two environment variables to run properly: `GOOGLE_API_KEY` and `DATABASE_URL`.
